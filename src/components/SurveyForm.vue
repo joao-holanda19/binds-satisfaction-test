@@ -2,9 +2,21 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-6">
     <div class="mx-auto w-full max-w-xl rounded-2xl bg-white p-6 shadow">
-      <div class="flex items-center justify-between">
-        <h1 class="text-xl font-bold">{{ titulo }}</h1>
-        <span class="text-sm text-gray-500">Passo {{ step }} de 4</span>
+      <!-- TOPO (atualizado com barra de progresso) -->
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h1 class="text-xl font-bold">{{ titulo }}</h1>
+          <p class="mt-1 text-sm text-gray-500">Etapa {{ step }} de 4</p>
+        </div>
+
+        <div class="flex items-center gap-2" aria-label="Progresso">
+          <span
+            v-for="n in 4"
+            :key="n"
+            class="h-2 w-8 rounded-full"
+            :class="n <= step ? 'bg-black' : 'bg-gray-200'"
+          />
+        </div>
       </div>
 
       <div class="mt-6">
@@ -160,15 +172,13 @@ const emit = defineEmits<{
 const step = ref<1 | 2 | 3 | 4>(1);
 const showErrors = ref(false);
 
-// cópia local (evita mutar prop diretamente)
 const localAnswers = reactive<SurveyAnswers>({ ...props.initialAnswers });
 
-// se o pai trocar initialAnswers (ex.: carregou do storage), atualiza a cópia
 watch(
   () => props.initialAnswers,
   (next) => {
     Object.assign(localAnswers, next);
-    step.value = 1; // opcional: volta pro passo 1 ao trocar o registro
+    step.value = 1;
     showErrors.value = false;
   },
   { deep: true }
@@ -220,7 +230,6 @@ function next() {
     return;
   }
 
-  // submit no passo 4
   emit('submit', { ...localAnswers });
 }
 </script>
