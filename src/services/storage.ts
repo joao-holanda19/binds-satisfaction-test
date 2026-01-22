@@ -3,8 +3,8 @@ import type { SurveyAnswers } from '../types/survey';
 
 export type SurveyRecord = {
   id: string;
-  createdAt: string; // ISO (criação)
-  updatedAt?: string; // ISO (última edição) - opcional
+  createdAt: string; // ISO
+  updatedAt?: string; // ISO (opcional para compatibilidade com dados antigos)
   answers: SurveyAnswers;
 };
 
@@ -26,7 +26,12 @@ function writeAll(list: SurveyRecord[]) {
 }
 
 export function listarRespostas(): SurveyRecord[] {
-  return readAll().sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  // mais recente primeiro (prioriza updatedAt quando existir)
+  return readAll().sort((a, b) => {
+    const da = a.updatedAt ?? a.createdAt;
+    const db = b.updatedAt ?? b.createdAt;
+    return da < db ? 1 : -1;
+  });
 }
 
 export function obterResposta(id: string): SurveyRecord | null {
@@ -35,9 +40,12 @@ export function obterResposta(id: string): SurveyRecord | null {
 }
 
 export function salvarResposta(answers: SurveyAnswers): SurveyRecord {
+  const now = new Date().toISOString();
+
   const record: SurveyRecord = {
     id: crypto.randomUUID(),
-    createdAt: new Date().toISOString(),
+    createdAt: now,
+    updatedAt: now,
     answers,
   };
 
