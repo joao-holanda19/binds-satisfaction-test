@@ -1,36 +1,80 @@
-import type { SurveyAnswers } from '../types/Survey';
+// src/services/storage.ts
+import type { SurveyAnswers } from '../types/survey';
 
-const CHAVE_STORAGE = 'pesquisa_satisfacao_respostas';
-
-export type SurveyRecord = SurveyAnswers & {
+export type SurveyRecord = {
   id: string;
-  criadoEm: string; // ISO
+  createdAt: string; // ISO (criação)
+  updatedAt?: string; // ISO (última edição) - opcional
+  answers: SurveyAnswers;
 };
 
-export function listarRespostas(): SurveyRecord[] {
-  const raw = localStorage.getItem(CHAVE_STORAGE);
-  if (!raw) return [];
+const STORAGE_KEY = 'binds_satisfaction_responses_v1';
+
+function readAll(): SurveyRecord[] {
   try {
-    return JSON.parse(raw) as SurveyRecord[];
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as SurveyRecord[];
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
 }
 
+function writeAll(list: SurveyRecord[]) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+export function listarRespostas(): SurveyRecord[] {
+  return readAll().sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+}
+
+export function obterResposta(id: string): SurveyRecord | null {
+  const list = readAll();
+  return list.find((r) => r.id === id) ?? null;
+}
+
 export function salvarResposta(answers: SurveyAnswers): SurveyRecord {
   const record: SurveyRecord = {
-    ...answers,
     id: crypto.randomUUID(),
-    criadoEm: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    answers,
   };
 
-  const lista = listarRespostas();
-  lista.unshift(record); // mais recente primeiro
-  localStorage.setItem(CHAVE_STORAGE, JSON.stringify(lista));
+  const list = readAll();
+  list.unshift(record);
+  writeAll(list);
 
   return record;
 }
 
-export function limparRespostas(): void {
-  localStorage.removeItem(CHAVE_STORAGE);
+export function atualizarResposta(id: string, answers: SurveyAnswers): SurveyRecord | null {
+  const list = readAll();
+  const idx = list.findIndex((r) => r.id === id);
+  if (idx === -1) return null;
+
+  const existing = list[idx];
+  if (!existing) return null;
+
+  const updated: SurveyRecord = {
+    ...existing,
+    answers,
+    updatedAt: new Date().toISOString(),
+  };
+
+  list[idx] = updated;
+  writeAll(list);
+  return updated;
+}
+
+export function removerResposta(id: string): boolean {
+  const list = readAll();
+  const next = list.filter((r) => r.id !== id);
+  if (next.length === list.length) return false;
+  writeAll(next);
+  return true;
+}
+
+export function limparRespostas() {
+  localStorage.removeItem(STORAGE_KEY);
 }
