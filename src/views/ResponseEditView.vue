@@ -1,30 +1,26 @@
 <!-- src/views/ResponseEditView.vue -->
 <template>
-  <div class="min-h-screen bg-gray-100 p-6">
+  <div class="min-h-screen binds-bg p-6">
     <div class="mx-auto w-full max-w-3xl">
-      <div class="mb-4 flex items-center justify-between gap-3">
+      <div class="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 class="text-xl font-bold">Editar resposta</h1>
-          <p class="mt-1 text-sm text-gray-600" v-if="record">
-            ID: <span class="font-mono">{{ record.id }}</span>
-            • Criada em: {{ formatarData(record.createdAt) }}
+          <p v-if="record" class="mt-2 text-sm text-gray-600">
+            <span class="font-semibold">ID:</span>
+            <span class="font-mono">{{ record.id }}</span>
+            • <span class="font-semibold">Criada em:</span> {{ formatarData(record.createdAt) }}
           </p>
         </div>
 
-        <RouterLink
-          to="/responses"
-          class="rounded-xl border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
-        >
+        <RouterLink to="/responses" class="btn btn-secondary">
           Voltar para a lista
         </RouterLink>
       </div>
 
-      <div v-if="notFound" class="rounded-2xl bg-white p-6 shadow">
-        <p class="text-sm text-gray-700">
-          Não foi possível encontrar essa resposta.
-        </p>
+      <div v-if="notFound" class="binds-card p-6">
+        <p class="text-sm text-gray-700">Não foi possível encontrar essa resposta.</p>
         <div class="mt-4">
-          <RouterLink to="/responses" class="text-sm text-blue-600 hover:underline">
+          <RouterLink to="/responses" class="link text-sm">
             ← Voltar para as respostas
           </RouterLink>
         </div>

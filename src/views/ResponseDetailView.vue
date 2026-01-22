@@ -1,13 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gray-100 p-6">
-    <div class="mx-auto w-full max-w-3xl rounded-2xl bg-white p-6 shadow">
-      <div class="flex items-center justify-between gap-3">
+  <div class="min-h-screen binds-bg p-6">
+    <div class="mx-auto w-full max-w-3xl binds-card p-6">
+      <div class="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 class="text-xl font-bold">Detalhe da resposta</h1>
 
-          <div v-if="record" class="mt-1 text-sm text-gray-600 space-y-1">
+          <div v-if="record" class="mt-2 space-y-1 text-sm text-gray-600">
             <p>
-              ID: <span class="font-mono">{{ record.id }}</span>
+              <span class="font-semibold">ID:</span>
+              <span class="font-mono">{{ record.id }}</span>
             </p>
 
             <p>
@@ -22,18 +23,15 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
-          <RouterLink
-            to="/responses"
-            class="rounded-xl border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
-          >
+        <div class="flex flex-wrap items-center gap-2">
+          <RouterLink to="/responses" class="btn btn-secondary">
             Voltar
           </RouterLink>
 
           <RouterLink
             v-if="record"
             :to="`/responses/${record.id}/edit`"
-            class="rounded-xl border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+            class="btn btn-secondary"
           >
             Editar
           </RouterLink>
@@ -41,7 +39,7 @@
           <button
             v-if="record"
             type="button"
-            class="rounded-xl border border-red-200 px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+            class="btn btn-secondary border-red-200 text-red-700 hover:bg-red-50"
             @click="excluir"
           >
             Excluir
@@ -49,15 +47,18 @@
         </div>
       </div>
 
-      <div v-if="!record" class="mt-6 rounded-xl bg-gray-50 p-4 text-sm text-gray-700">
+      <div
+        v-if="!record"
+        class="mt-6 rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-700"
+      >
         Resposta não encontrada.
       </div>
 
       <div v-else class="mt-6 space-y-4">
-        <div class="rounded-2xl border border-gray-200 p-4">
+        <div class="rounded-2xl border border-gray-200 bg-white p-4">
           <h2 class="text-sm font-semibold text-gray-700">Respostas</h2>
 
-          <div class="mt-3 grid gap-3 text-sm">
+          <div class="mt-3 grid gap-3 text-sm text-gray-800">
             <div>
               <span class="font-semibold">Humor:</span>
               {{ traduzirHumor(record.answers.mood) }}
@@ -85,8 +86,8 @@
           </div>
         </div>
 
-        <div class="text-sm text-gray-600">
-          <RouterLink to="/responses" class="text-blue-600 hover:underline">
+        <div class="text-sm">
+          <RouterLink to="/responses" class="link">
             ← Voltar para a lista
           </RouterLink>
         </div>
