@@ -1,20 +1,21 @@
 <!-- src/components/SurveyForm.vue -->
 <template>
-  <div class="min-h-screen bg-gray-100 p-6">
-    <div class="mx-auto w-full max-w-xl rounded-2xl bg-white p-6 shadow">
-      <!-- TOPO (atualizado com barra de progresso) -->
+  <div class="min-h-screen binds-bg p-6">
+    <div class="mx-auto w-full max-w-xl binds-card p-6">
+      <!-- Header -->
       <div class="flex items-start justify-between gap-4">
         <div>
           <h1 class="text-xl font-bold">{{ titulo }}</h1>
           <p class="mt-1 text-sm text-gray-500">Etapa {{ step }} de 4</p>
         </div>
 
+        <!-- Progress -->
         <div class="flex items-center gap-2" aria-label="Progresso">
           <span
             v-for="n in 4"
             :key="n"
             class="h-2 w-8 rounded-full"
-            :class="n <= step ? 'bg-black' : 'bg-gray-200'"
+            :class="n <= step ? 'bg-binds-600' : 'bg-gray-200'"
           />
         </div>
       </div>
@@ -31,7 +32,7 @@
               :key="m.value"
               type="button"
               class="rounded-xl border p-3 text-2xl transition"
-              :class="localAnswers.mood === m.value ? 'border-black bg-gray-50' : 'border-gray-200'"
+              :class="localAnswers.mood === m.value ? 'border-binds-600 bg-binds-50' : 'border-gray-200 bg-white hover:bg-gray-50'"
               @click="localAnswers.mood = m.value"
               :aria-label="m.label"
             >
@@ -49,13 +50,13 @@
           <h2 class="text-lg font-semibold">Que nota você daria para esta página?</h2>
           <p class="mt-1 text-sm text-gray-600">De 1 a 5.</p>
 
-          <div class="mt-4 flex gap-2">
+          <div class="mt-4 flex flex-wrap gap-2">
             <button
               v-for="n in [1, 2, 3, 4, 5]"
               :key="n"
               type="button"
               class="flex h-10 w-10 items-center justify-center rounded-xl border transition"
-              :class="localAnswers.csat === n ? 'border-black bg-gray-50' : 'border-gray-200'"
+              :class="localAnswers.csat === n ? 'border-binds-600 bg-binds-50' : 'border-gray-200 bg-white hover:bg-gray-50'"
               @click="localAnswers.csat = n"
               :aria-label="`Selecionar nota ${n}`"
             >
@@ -78,7 +79,7 @@
             v-model.trim="localAnswers.email"
             type="email"
             placeholder="seuemail@exemplo.com"
-            class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2 outline-none focus:border-black"
+            class="input mt-1"
           />
 
           <p v-if="showErrors && localAnswers.email && !isEmailValid" class="mt-3 text-sm text-red-600">
@@ -97,7 +98,7 @@
               :key="f.value"
               type="button"
               class="rounded-xl border px-4 py-3 text-left transition"
-              :class="localAnswers.feature === f.value ? 'border-black bg-gray-50' : 'border-gray-200'"
+              :class="localAnswers.feature === f.value ? 'border-binds-600 bg-binds-50' : 'border-gray-200 bg-white hover:bg-gray-50'"
               @click="localAnswers.feature = f.value"
             >
               {{ f.label }}
@@ -109,7 +110,7 @@
             v-model.trim="localAnswers.comment"
             rows="3"
             placeholder="Digite sua resposta"
-            class="mt-1 w-full resize-none rounded-xl border border-gray-200 px-3 py-2 outline-none focus:border-black"
+            class="input mt-1 resize-none"
           />
         </div>
       </div>
@@ -118,9 +119,8 @@
       <div class="mt-8 flex items-center justify-between">
         <button
           type="button"
-          class="rounded-xl border border-gray-300 px-4 py-2"
+          class="btn btn-secondary"
           :disabled="step === 1 || isSubmitting"
-          :class="step === 1 || isSubmitting ? 'opacity-50' : ''"
           @click="prev"
         >
           Voltar
@@ -128,9 +128,8 @@
 
         <button
           type="button"
-          class="rounded-xl bg-black px-4 py-2 text-white"
+          class="btn btn-primary"
           :disabled="isNextDisabled || isSubmitting"
-          :class="isNextDisabled || isSubmitting ? 'opacity-50' : ''"
           @click="next"
         >
           <span v-if="isSubmitting">Enviando...</span>
@@ -138,7 +137,10 @@
         </button>
       </div>
 
-      <p v-if="submittedMessage" class="mt-6 rounded-xl bg-green-50 p-3 text-sm text-green-700">
+      <p
+        v-if="submittedMessage"
+        class="mt-6 rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-800"
+      >
         {{ submittedMessage }}
       </p>
     </div>

@@ -9,32 +9,28 @@
     @submit="onSubmit"
   />
 
-  <!-- MODAL "OBRIGADO" (formato do exemplo) -->
+  <!-- MODAL "OBRIGADO" (Binds: roxo/branco, padrão do layout) -->
   <div
     v-if="showThankYouModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6"
+    class="fixed inset-0 z-50 flex items-center justify-center p-6"
+    style="background: rgba(17, 24, 39, 0.45)"
     role="dialog"
     aria-modal="true"
     aria-label="Resposta enviada"
   >
-    <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow">
+    <div class="w-full max-w-sm binds-card p-6">
       <h2 class="text-2xl font-bold">Obrigado!</h2>
       <p class="mt-2 text-sm text-gray-600">Sua resposta foi enviada com sucesso.</p>
 
       <div class="mt-6 grid gap-3">
-        <button
-          type="button"
-          class="w-full rounded-xl bg-black px-4 py-2 text-white"
-          @click="closeThankYou"
-        >
+        <button type="button" class="btn btn-primary w-full" @click="closeThankYou">
           Fechar
         </button>
 
         <button
           type="button"
-          class="w-full rounded-xl border border-gray-300 px-4 py-2"
+          class="btn btn-secondary w-full"
           :disabled="!lastSavedId"
-          :class="!lastSavedId ? 'opacity-50' : ''"
           @click="goToMySubmission"
         >
           Ver meu envio
@@ -58,7 +54,6 @@ const answers = ref<SurveyAnswers>(defaultSurveyAnswers());
 const isSubmitting = ref(false);
 const submitted = ref(false);
 
-// Modal do "Obrigado"
 const showThankYouModal = ref(false);
 const lastSavedId = ref<string | null>(null);
 
