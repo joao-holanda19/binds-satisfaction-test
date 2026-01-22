@@ -1,10 +1,9 @@
-// src/services/storage.ts
 import type { SurveyAnswers } from '../types/survey';
 
 export type SurveyRecord = {
   id: string;
   createdAt: string; // ISO
-  updatedAt?: string; // ISO (opcional para compatibilidade com dados antigos)
+  updatedAt?: string; // ISO (opcional)
   answers: SurveyAnswers;
 };
 
@@ -26,11 +25,11 @@ function writeAll(list: SurveyRecord[]) {
 }
 
 export function listarRespostas(): SurveyRecord[] {
-  // mais recente primeiro (prioriza updatedAt quando existir)
+  // mais recente primeiro (prioriza updatedAt, senão createdAt)
   return readAll().sort((a, b) => {
-    const da = a.updatedAt ?? a.createdAt;
-    const db = b.updatedAt ?? b.createdAt;
-    return da < db ? 1 : -1;
+    const aDate = a.updatedAt ?? a.createdAt;
+    const bDate = b.updatedAt ?? b.createdAt;
+    return aDate < bDate ? 1 : -1;
   });
 }
 
@@ -40,12 +39,9 @@ export function obterResposta(id: string): SurveyRecord | null {
 }
 
 export function salvarResposta(answers: SurveyAnswers): SurveyRecord {
-  const now = new Date().toISOString();
-
   const record: SurveyRecord = {
     id: crypto.randomUUID(),
-    createdAt: now,
-    updatedAt: now,
+    createdAt: new Date().toISOString(),
     answers,
   };
 
@@ -65,9 +61,9 @@ export function atualizarResposta(id: string, answers: SurveyAnswers): SurveyRec
   if (!existing) return null;
 
   const updated: SurveyRecord = {
-    ...existing,
-    answers,
-    updatedAt: new Date().toISOString(),
+    ...existing,              // mantém id, createdAt e qualquer campo futuro
+    answers,                  // atualiza respostas
+    updatedAt: new Date().toISOString(), // marca atualização
   };
 
   list[idx] = updated;
