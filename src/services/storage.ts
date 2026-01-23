@@ -9,41 +9,94 @@ export type SurveyRecord = {
 
 const STORAGE_KEY = 'binds_satisfaction_responses_v1';
 
-function readAll(): SurveyRecord[] {
+// ---------- helpers ----------
+function safeParseJSON<T>(raw: string): T | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as SurveyRecord[];
-    return Array.isArray(parsed) ? parsed : [];
+    return JSON.parse(raw) as T;
   } catch {
-    return [];
+    return null;
   }
+}
+
+function isObject(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null;
+}
+
+function ensureISO(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const t = Date.parse(value);
+  return Number.isFinite(t) ? new Date(t).toISOString() : null;
+}
+
+function safeUUID(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+
+  // fallback simples 
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+function normalizeRecord(raw: unknown): SurveyRecord | null {
+  if (!isObject(raw)) return null;
+
+  const id = typeof raw.id === 'string' ? raw.id : null;
+  const createdAt = ensureISO(raw.createdAt);
+  const updatedAt = raw.updatedAt === undefined ? undefined : ensureISO(raw.updatedAt) ?? undefined;
+
+  const answers = isObject(raw.answers) ? (raw.answers as SurveyAnswers) : null;
+
+  if (!id || !createdAt || !answers) return null;
+
+  return { id, createdAt, updatedAt, answers };
+}
+
+function readAll(): SurveyRecord[] {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return [];
+
+  const parsed = safeParseJSON<unknown>(raw);
+  if (!Array.isArray(parsed)) return [];
+
+  const normalized = parsed
+    .map(normalizeRecord)
+    .filter((r): r is SurveyRecord => Boolean(r));
+
+  return normalized;
 }
 
 function writeAll(list: SurveyRecord[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
 }
 
-export function listarRespostas(): SurveyRecord[] {
-  // mais recente primeiro (usa updatedAt se existir, senão createdAt)
-  return readAll().sort((a, b) => {
-    const da = a.updatedAt ?? a.createdAt;
-    const db = b.updatedAt ?? b.createdAt;
-    return da < db ? 1 : -1;
+function sortByMostRecent(list: SurveyRecord[]) {
+  return [...list].sort((a, b) => {
+    const da = Date.parse(a.updatedAt ?? a.createdAt);
+    const db = Date.parse(b.updatedAt ?? b.createdAt);
+    return db - da; // mais recente primeiro
   });
 }
 
+// ---------- API ----------
+export function listarRespostas(): SurveyRecord[] {
+  return sortByMostRecent(readAll());
+}
+
 export function obterResposta(id: string): SurveyRecord | null {
-  const list = readAll();
-  return list.find((r) => r.id === id) ?? null;
+  return readAll().find((r) => r.id === id) ?? null;
 }
 
 export function salvarResposta(answers: SurveyAnswers): SurveyRecord {
   const now = new Date().toISOString();
 
   const record: SurveyRecord = {
-    id: crypto.randomUUID(),
+    id: safeUUID(),
     createdAt: now,
+    updatedAt: now, // ok manter: facilita “Data” refletir criação imediatamente
     answers,
   };
 
@@ -59,9 +112,7 @@ export function atualizarResposta(id: string, answers: SurveyAnswers): SurveyRec
   const idx = list.findIndex((r) => r.id === id);
   if (idx === -1) return null;
 
-  const existing = list[idx];
-  if (!existing) return null;
-
+  const existing = list[idx]!;
   const updated: SurveyRecord = {
     ...existing,
     answers,
