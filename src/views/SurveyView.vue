@@ -9,51 +9,53 @@
   />
 
   <!-- MODAL "OBRIGADO" (padrão Binds) -->
-  <div
-    v-if="showThankYouModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Resposta enviada"
-  >
-    <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow">
-      <div class="flex items-start justify-between gap-3">
-        <div>
-          <h2 class="text-2xl font-bold text-gray-900">Obrigado!</h2>
-          <p class="mt-2 text-sm text-gray-600">
-            Sua resposta foi enviada com sucesso.
-          </p>
-        </div>
-
-        <span
-          class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-xl"
-          aria-hidden="true"
-        >
-          ✅
-        </span>
+<div
+  v-if="showThankYouModal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Resposta enviada"
+>
+  <div class="w-full max-w-sm binds-card p-6">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h2 class="text-2xl font-bold">Obrigado!</h2>
+        <p class="mt-2 text-sm text-gray-600">
+          Sua resposta foi enviada com sucesso.
+        </p>
       </div>
 
-      <div class="mt-6 grid gap-3">
-        <button
-          type="button"
-          class="btn btn-primary w-full justify-center"
-          @click="closeThankYou"
-        >
-          Fechar
-        </button>
+      <button
+        type="button"
+        class="rounded-xl p-2 text-gray-500 hover:bg-gray-50"
+        aria-label="Fechar"
+        @click="closeThankYou"
+      >
+        ✕
+      </button>
+    </div>
 
-        <button
-          type="button"
-          class="btn btn-secondary w-full justify-center"
-          :disabled="!lastSavedId"
-          :class="!lastSavedId ? 'opacity-50' : ''"
-          @click="goToMySubmission"
-        >
-          Ver meu envio
-        </button>
-      </div>
+    <div class="mt-6 grid gap-3">
+      <button
+        type="button"
+        class="btn btn-primary w-full"
+        @click="closeThankYou"
+      >
+        Fechar
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-secondary w-full"
+        :disabled="!lastSavedId"
+        :class="!lastSavedId ? 'opacity-50' : ''"
+        @click="goToMySubmission"
+      >
+        Ver meu envio
+      </button>
     </div>
   </div>
+</div>
 </template>
 
 <script setup lang="ts">
