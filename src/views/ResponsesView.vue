@@ -12,7 +12,7 @@
           </div>
 
           <div class="flex flex-wrap gap-2">
-            <button type="button" class="btn btn-primary" @click="atualizar">
+            <button type="button" class="btn btn-primary" @click="atualizarComFeedback">
               Atualizar
             </button>
 
@@ -31,6 +31,16 @@
         <div class="mt-4 text-sm text-gray-600">
           Total: <span class="font-semibold">{{ respostas.length }}</span>
         </div>
+
+        <!-- feedback do atualizar -->
+        <p
+          v-if="toast"
+          class="mt-4 rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-700"
+          role="status"
+          aria-live="polite"
+        >
+          {{ toast }}
+        </p>
       </div>
 
       <!-- Empty -->
@@ -40,7 +50,7 @@
       >
         Nenhuma resposta salva ainda.
         <div class="mt-4">
-          <RouterLink :to="{ name: 'survey' }" class="btn btn-primary">
+          <RouterLink to="/p/default" class="btn btn-primary">
             Iniciar pesquisa
           </RouterLink>
         </div>
@@ -114,11 +124,11 @@
 
       <!-- Footer -->
       <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
-        <RouterLink :to="{ name: 'home' }" class="link text-sm">
+        <RouterLink to="/" class="link text-sm">
           ← Voltar para o início
         </RouterLink>
 
-        <RouterLink :to="{ name: 'survey' }" class="btn btn-primary">
+        <RouterLink to="/p/default" class="btn btn-primary">
           Nova pesquisa
         </RouterLink>
       </div>
@@ -127,7 +137,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, onBeforeUnmount } from 'vue';
 import { useRoute } from 'vue-router';
 import { listarRespostas, limparRespostas, removerResposta } from '../services/storage';
 import type { SurveyRecord } from '../services/storage';
@@ -137,8 +147,28 @@ const route = useRoute();
 
 const respostas = ref<SurveyRecord[]>([]);
 
+// feedback curto
+const toast = ref<string>('');
+let toastTimer: number | null = null;
+
+function showToast(message: string) {
+  toast.value = message;
+
+  if (toastTimer) window.clearTimeout(toastTimer);
+
+  toastTimer = window.setTimeout(() => {
+    toast.value = '';
+    toastTimer = null;
+  }, 1500);
+}
+
 function atualizar() {
   respostas.value = listarRespostas();
+}
+
+function atualizarComFeedback() {
+  atualizar();
+  showToast('Lista atualizada ✅');
 }
 
 function limpar() {
@@ -146,6 +176,7 @@ function limpar() {
   if (!ok) return;
   limparRespostas();
   atualizar();
+  showToast('Respostas removidas ✅');
 }
 
 function excluir(id: string) {
@@ -153,6 +184,7 @@ function excluir(id: string) {
   if (!ok) return;
   removerResposta(id);
   atualizar();
+  showToast('Resposta excluída ✅');
 }
 
 function formatarData(iso: string) {
@@ -197,4 +229,8 @@ watch(
     atualizar();
   }
 );
+
+onBeforeUnmount(() => {
+  if (toastTimer) window.clearTimeout(toastTimer);
+});
 </script>
