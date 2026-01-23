@@ -75,18 +75,18 @@
 
             <div class="flex flex-wrap items-center gap-2">
               <RouterLink
-  :to="{ name: 'response-detail', params: { id: r.id } }"
-  class="btn btn-secondary"
->
-  Ver
-</RouterLink>
+                :to="{ name: 'response-detail', params: { id: r.id } }"
+                class="btn btn-secondary"
+              >
+                Ver
+              </RouterLink>
 
-<RouterLink
-  :to="{ name: 'response-edit', params: { id: r.id } }"
-  class="btn btn-primary"
->
-  Editar
-</RouterLink>
+              <RouterLink
+                :to="{ name: 'response-edit', params: { id: r.id } }"
+                class="btn btn-primary"
+              >
+                Editar
+              </RouterLink>
 
               <button type="button" class="btn btn-danger" @click="excluir(r.id)">
                 Excluir
@@ -129,10 +129,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { listarRespostas, limparRespostas, removerResposta } from '../services/storage';
 import type { SurveyRecord } from '../services/storage';
 import type { Mood, FeatureChoice } from '../types/survey';
+
+const route = useRoute();
 
 const respostas = ref<SurveyRecord[]>([]);
 
@@ -188,4 +191,12 @@ function traduzirRecurso(f: FeatureChoice | null) {
 onMounted(() => {
   atualizar();
 });
+
+// sempre que voltar/navegar para esta tela, garante lista atualizada
+watch(
+  () => route.fullPath,
+  () => {
+    atualizar();
+  }
+);
 </script>
