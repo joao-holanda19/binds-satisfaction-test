@@ -3,7 +3,7 @@ import type { SurveyAnswers } from '../types/survey';
 export type SurveyRecord = {
   id: string;
   createdAt: string; // ISO
-  updatedAt?: string; // ISO (quando editar)
+  updatedAt?: string; // ISO (opcional)
   answers: SurveyAnswers;
 };
 
@@ -39,9 +39,12 @@ export function obterResposta(id: string): SurveyRecord | null {
 }
 
 export function salvarResposta(answers: SurveyAnswers): SurveyRecord {
+  const now = new Date().toISOString();
+
   const record: SurveyRecord = {
     id: crypto.randomUUID(),
-    createdAt: new Date().toISOString(),
+    createdAt: now,
+    updatedAt: now,
     answers,
   };
 
