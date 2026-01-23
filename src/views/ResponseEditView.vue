@@ -114,8 +114,8 @@ async function onSubmit(payload: SurveyAnswers) {
     record.value = updated;
     saved.value = true;
 
-    // vai pro detalhe
-    router.push(`/responses/${id.value}`);
+    // vai pro detalhe (rota nomeada)
+    router.push({ name: 'response-detail', params: { id: id.value } });
   } finally {
     isSubmitting.value = false;
   }
