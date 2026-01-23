@@ -45,9 +45,10 @@
         </div>
       </div>
 
-      <div v-else>
+      <div v-else class="binds-card p-6">
         <SurveyForm
           v-if="initialAnswers"
+          embedded
           titulo="Editar pesquisa"
           rotulo-enviar="Salvar alterações"
           :initial-answers="initialAnswers"
