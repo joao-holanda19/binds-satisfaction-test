@@ -29,7 +29,7 @@
           <RouterLink
             v-if="record"
             :to="`/responses/${record.id}`"
-            class="btn btn-secondary"
+            class="btn btn-primary"
           >
             Ver detalhe
           </RouterLink>
@@ -45,10 +45,9 @@
         </div>
       </div>
 
-      <div v-else class="binds-card p-6">
+      <div v-else>
         <SurveyForm
           v-if="initialAnswers"
-          embedded
           titulo="Editar pesquisa"
           rotulo-enviar="Salvar alterações"
           :initial-answers="initialAnswers"
@@ -97,7 +96,6 @@ onMounted(() => {
   }
   record.value = r;
 
-  // clona para evitar mutar o objeto original enquanto edita
   initialAnswers.value = JSON.parse(JSON.stringify(r.answers)) as SurveyAnswers;
 });
 
@@ -112,12 +110,9 @@ async function onSubmit(payload: SurveyAnswers) {
       return;
     }
 
-    // atualiza cabeçalho local (para refletir updatedAt se continuar na tela)
     record.value = updated;
-
     saved.value = true;
 
-    // após salvar, manda para o detalhe
     router.push(`/responses/${id.value}`);
   } finally {
     isSubmitting.value = false;
