@@ -13,19 +13,22 @@ const router = createRouter({
     { path: '/p/default', name: 'survey', component: SurveyView },
     { path: '/responses', name: 'responses', component: ResponsesView },
 
-    // MAIS ESPECÍFICA PRIMEIRO (edit) + valida UUID
+    // EDIT (com regex) - mais específico
     {
       path: `/responses/:id(${UUID_RE})/edit`,
       name: 'response-edit',
       component: () => import('../views/ResponseEditView.vue'),
     },
 
-    // DETALHE + valida UUID
+    // DETALHE (com regex)
     {
       path: `/responses/:id(${UUID_RE})`,
       name: 'response-detail',
       component: () => import('../views/ResponseDetailView.vue'),
     },
+
+    // fallback opcional:
+    // { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
 });
 
