@@ -74,13 +74,19 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-              <RouterLink :to="`/responses/${r.id}`" class="btn btn-secondary">
-                Ver
-              </RouterLink>
+              <RouterLink
+  :to="{ name: 'response-detail', params: { id: r.id } }"
+  class="btn btn-secondary"
+>
+  Ver
+</RouterLink>
 
-              <RouterLink :to="`/responses/${r.id}/edit`" class="btn btn-primary">
-                Editar
-              </RouterLink>
+<RouterLink
+  :to="{ name: 'response-edit', params: { id: r.id } }"
+  class="btn btn-primary"
+>
+  Editar
+</RouterLink>
 
               <button type="button" class="btn btn-danger" @click="excluir(r.id)">
                 Excluir

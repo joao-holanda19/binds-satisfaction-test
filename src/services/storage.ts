@@ -3,7 +3,7 @@ import type { SurveyAnswers } from '../types/survey';
 export type SurveyRecord = {
   id: string;
   createdAt: string; // ISO
-  updatedAt?: string; // ISO (opcional)
+  updatedAt?: string; // ISO (quando editar)
   answers: SurveyAnswers;
 };
 
@@ -25,11 +25,11 @@ function writeAll(list: SurveyRecord[]) {
 }
 
 export function listarRespostas(): SurveyRecord[] {
-  // mais recente primeiro (prioriza updatedAt, senão createdAt)
+  // mais recente primeiro (usa updatedAt se existir, senão createdAt)
   return readAll().sort((a, b) => {
-    const aDate = a.updatedAt ?? a.createdAt;
-    const bDate = b.updatedAt ?? b.createdAt;
-    return aDate < bDate ? 1 : -1;
+    const da = a.updatedAt ?? a.createdAt;
+    const db = b.updatedAt ?? b.createdAt;
+    return da < db ? 1 : -1;
   });
 }
 
@@ -61,13 +61,14 @@ export function atualizarResposta(id: string, answers: SurveyAnswers): SurveyRec
   if (!existing) return null;
 
   const updated: SurveyRecord = {
-    ...existing,              // mantém id, createdAt e qualquer campo futuro
-    answers,                  // atualiza respostas
-    updatedAt: new Date().toISOString(), // marca atualização
+    ...existing,
+    answers,
+    updatedAt: new Date().toISOString(),
   };
 
   list[idx] = updated;
   writeAll(list);
+
   return updated;
 }
 

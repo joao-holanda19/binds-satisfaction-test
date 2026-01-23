@@ -25,12 +25,12 @@
 
         <div class="flex flex-wrap items-center gap-2">
           <RouterLink
-            v-if="record"
-            :to="`/responses/${record.id}/edit`"
-            class="btn btn-primary"
-          >
-            Editar
-          </RouterLink>
+  v-if="record"
+  :to="{ name: 'response-edit', params: { id: record.id } }"
+  class="btn btn-primary"
+>
+  Editar
+</RouterLink>
 
           <button
             v-if="record"
