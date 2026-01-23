@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen binds-bg p-6">
-    <div class="mx-auto w-full max-w-xl binds-card p-6">
+  <div :class="embedded ? '' : 'min-h-screen binds-bg p-6'">
+    <div :class="embedded ? '' : 'mx-auto w-full max-w-xl binds-card p-6'">
       <!-- Cabeçalho -->
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
@@ -8,7 +8,6 @@
           <p class="mt-1 text-sm text-gray-600">Etapa {{ step }} de 4</p>
         </div>
 
-        <!-- Progresso (padrão prints) -->
         <div class="flex items-center gap-2" aria-label="Progresso">
           <span
             v-for="n in 4"
@@ -32,7 +31,11 @@
               :key="m.value"
               type="button"
               class="rounded-xl border p-3 text-2xl transition"
-              :class="localAnswers.mood === m.value ? 'border-violet-600 bg-violet-50' : 'border-gray-200 bg-white'"
+              :class="
+                localAnswers.mood === m.value
+                  ? 'border-violet-600 bg-violet-50'
+                  : 'border-gray-200 bg-white'
+              "
               @click="localAnswers.mood = m.value"
               :aria-label="m.label"
             >
@@ -56,7 +59,11 @@
               :key="n"
               type="button"
               class="flex h-10 w-10 items-center justify-center rounded-xl border transition"
-              :class="localAnswers.csat === n ? 'border-violet-600 bg-violet-50' : 'border-gray-200 bg-white'"
+              :class="
+                localAnswers.csat === n
+                  ? 'border-violet-600 bg-violet-50'
+                  : 'border-gray-200 bg-white'
+              "
               @click="localAnswers.csat = n"
               :aria-label="`Selecionar nota ${n}`"
             >
@@ -98,7 +105,11 @@
               :key="f.value"
               type="button"
               class="rounded-xl border px-4 py-3 text-left transition"
-              :class="localAnswers.feature === f.value ? 'border-violet-600 bg-violet-50' : 'border-gray-200 bg-white'"
+              :class="
+                localAnswers.feature === f.value
+                  ? 'border-violet-600 bg-violet-50'
+                  : 'border-gray-200 bg-white'
+              "
               @click="localAnswers.feature = f.value"
             >
               {{ f.label }}
@@ -139,7 +150,10 @@
         </button>
       </div>
 
-      <p v-if="submittedMessage" class="mt-6 rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-700">
+      <p
+        v-if="submittedMessage"
+        class="mt-6 rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-700"
+      >
         {{ submittedMessage }}
       </p>
     </div>
@@ -157,12 +171,14 @@ const props = withDefaults(
     initialAnswers: SurveyAnswers;
     isSubmitting?: boolean;
     submittedMessage?: string;
+    embedded?: boolean;
   }>(),
   {
     titulo: 'Pesquisa',
     rotuloEnviar: 'Enviar',
     isSubmitting: false,
     submittedMessage: '',
+    embedded: false,
   }
 );
 
