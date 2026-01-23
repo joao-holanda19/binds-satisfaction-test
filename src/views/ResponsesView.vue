@@ -20,6 +20,7 @@
               type="button"
               class="btn btn-danger"
               :disabled="respostas.length === 0"
+              :class="respostas.length === 0 ? 'opacity-50' : ''"
               @click="limpar"
             >
               Limpar tudo
@@ -32,13 +33,12 @@
         </div>
       </div>
 
-      <!-- Empty state -->
+      <!-- Empty -->
       <div
         v-if="respostas.length === 0"
         class="mt-4 binds-card p-6 text-sm text-gray-700"
       >
         Nenhuma resposta salva ainda.
-
         <div class="mt-4">
           <RouterLink to="/p/default" class="btn btn-primary">
             Iniciar pesquisa
@@ -46,13 +46,14 @@
         </div>
       </div>
 
-      <!-- Lista -->
+      <!-- List -->
       <div v-else class="mt-4 space-y-3">
         <div
           v-for="r in respostas"
           :key="r.id"
-          class="binds-card p-5"
+          class="binds-card p-5 transition hover:-translate-y-[1px] hover:shadow-lg"
         >
+          <!-- Top row: info + ações -->
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <div class="text-sm text-gray-600">
@@ -60,11 +61,13 @@
                 {{ formatarData(r.createdAt) }}
               </div>
 
-              <div class="mt-1 text-sm text-gray-600">
-                <span class="font-semibold">Nota:</span> {{ r.answers.csat ?? '-' }}
-                <span class="mx-2 text-gray-300">•</span>
-                <span class="font-semibold">Humor:</span>
-                {{ traduzirHumor(r.answers.mood) }}
+              <div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                <span class="rounded-full bg-violet-50 px-3 py-1 font-semibold text-violet-700">
+                  Nota: {{ r.answers.csat ?? '-' }}
+                </span>
+                <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">
+                  Humor: {{ traduzirHumor(r.answers.mood) }}
+                </span>
               </div>
             </div>
 
@@ -93,10 +96,11 @@
             </div>
           </div>
 
+          <!-- Details -->
           <div class="mt-4 grid gap-2 text-sm text-gray-700">
             <div>
               <span class="font-semibold">E-mail:</span>
-              {{ r.answers.email || 'Não informado' }}
+              {{ r.answers.email ? r.answers.email : 'Não informado' }}
             </div>
 
             <div>
@@ -106,7 +110,7 @@
 
             <div>
               <span class="font-semibold">Comentário:</span>
-              {{ r.answers.comment || 'Sem comentário' }}
+              {{ r.answers.comment ? r.answers.comment : 'Sem comentário' }}
             </div>
           </div>
         </div>
@@ -154,7 +158,8 @@ function excluir(id: string) {
 
 function formatarData(iso: string) {
   try {
-    return new Date(iso).toLocaleString('pt-BR');
+    const d = new Date(iso);
+    return d.toLocaleString('pt-BR');
   } catch {
     return iso;
   }
