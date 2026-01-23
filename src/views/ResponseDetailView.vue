@@ -24,10 +24,6 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-          <RouterLink to="/responses" class="btn btn-secondary">
-            Voltar
-          </RouterLink>
-
           <RouterLink
             v-if="record"
             :to="`/responses/${record.id}/edit`"
@@ -47,18 +43,21 @@
         </div>
       </div>
 
-      <div
-        v-if="!record"
-        class="mt-6 rounded-xl bg-white p-4 text-sm text-gray-700 border border-gray-200"
-      >
-        Resposta não encontrada.
+      <div v-if="!record" class="mt-6 rounded-2xl bg-white p-6">
+        <p class="text-sm text-gray-700">Resposta não encontrada.</p>
+
+        <div class="mt-4">
+          <RouterLink to="/responses" class="link text-sm">
+            ← Voltar para a lista
+          </RouterLink>
+        </div>
       </div>
 
       <div v-else class="mt-6 space-y-4">
-        <div class="rounded-2xl border border-gray-200 bg-white p-4">
+        <div class="rounded-2xl border border-gray-200 bg-white p-5">
           <h2 class="text-sm font-semibold text-gray-700">Respostas</h2>
 
-          <div class="mt-3 grid gap-3 text-sm">
+          <div class="mt-3 grid gap-3 text-sm text-gray-700">
             <div>
               <span class="font-semibold">Humor:</span>
               {{ traduzirHumor(record.answers.mood) }}
