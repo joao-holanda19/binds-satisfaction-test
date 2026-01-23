@@ -55,28 +55,30 @@
       </div>
 
       <div v-else class="mt-6 space-y-4">
+        <!-- Badges (formato admin) -->
+        <div class="flex flex-wrap gap-2">
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs">
+            <span class="font-semibold">Nota:</span> {{ record.answers.csat ?? '-' }}
+          </span>
+
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs">
+            <span class="font-semibold">Humor:</span> {{ traduzirHumor(record.answers.mood) }}
+          </span>
+
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs">
+            <span class="font-semibold">Próximo recurso:</span>
+            {{ traduzirRecurso(record.answers.feature) }}
+          </span>
+        </div>
+
+        <!-- Bloco principal -->
         <div class="rounded-2xl border border-gray-200 bg-white p-4">
           <h2 class="text-sm font-semibold text-gray-700">Respostas</h2>
 
           <div class="mt-3 grid gap-3 text-sm text-gray-800">
             <div>
-              <span class="font-semibold">Humor:</span>
-              {{ traduzirHumor(record.answers.mood) }}
-            </div>
-
-            <div>
-              <span class="font-semibold">Nota (CSAT):</span>
-              {{ record.answers.csat ?? '-' }}
-            </div>
-
-            <div>
               <span class="font-semibold">E-mail:</span>
               {{ record.answers.email ? record.answers.email : 'Não informado' }}
-            </div>
-
-            <div>
-              <span class="font-semibold">Próximo recurso:</span>
-              {{ traduzirRecurso(record.answers.feature) }}
             </div>
 
             <div>
@@ -124,8 +126,7 @@ function excluir() {
 
 function formatarData(iso: string) {
   try {
-    const d = new Date(iso);
-    return d.toLocaleString('pt-BR');
+    return new Date(iso).toLocaleString('pt-BR');
   } catch {
     return iso;
   }

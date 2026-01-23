@@ -1,20 +1,39 @@
-<!-- src/views/ResponseEditView.vue -->
 <template>
   <div class="min-h-screen binds-bg p-6">
     <div class="mx-auto w-full max-w-3xl">
       <div class="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 class="text-xl font-bold">Editar resposta</h1>
-          <p v-if="record" class="mt-2 text-sm text-gray-600">
-            <span class="font-semibold">ID:</span>
-            <span class="font-mono">{{ record.id }}</span>
-            • <span class="font-semibold">Criada em:</span> {{ formatarData(record.createdAt) }}
-          </p>
+
+          <div v-if="record" class="mt-2 space-y-1 text-sm text-gray-600">
+            <p>
+              <span class="font-semibold">ID:</span>
+              <span class="font-mono">{{ record.id }}</span>
+            </p>
+            <p>
+              <span class="font-semibold">Criada em:</span>
+              {{ formatarData(record.createdAt) }}
+            </p>
+            <p v-if="record.updatedAt">
+              <span class="font-semibold">Atualizada em:</span>
+              {{ formatarData(record.updatedAt) }}
+            </p>
+          </div>
         </div>
 
-        <RouterLink to="/responses" class="btn btn-secondary">
-          Voltar para a lista
-        </RouterLink>
+        <div class="flex flex-wrap items-center gap-2">
+          <RouterLink to="/responses" class="btn btn-secondary">
+            Voltar para a lista
+          </RouterLink>
+
+          <RouterLink
+            v-if="record"
+            :to="`/responses/${record.id}`"
+            class="btn btn-secondary"
+          >
+            Ver detalhe
+          </RouterLink>
+        </div>
       </div>
 
       <div v-if="notFound" class="binds-card p-6">
@@ -91,6 +110,9 @@ async function onSubmit(payload: SurveyAnswers) {
       notFound.value = true;
       return;
     }
+
+    // atualiza cabeçalho local (para refletir updatedAt se continuar na tela)
+    record.value = updated;
 
     saved.value = true;
 

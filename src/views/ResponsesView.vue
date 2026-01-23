@@ -1,23 +1,23 @@
 <template>
-  <div class="min-h-screen bg-gray-100 p-6">
-    <div class="mx-auto w-full max-w-3xl rounded-2xl bg-white p-6 shadow">
-      <div class="flex items-center justify-between gap-3">
-        <h1 class="text-xl font-bold">Respostas salvas</h1>
+  <div class="min-h-screen binds-bg p-6">
+    <div class="mx-auto w-full max-w-3xl binds-card p-6">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 class="text-xl font-bold">Respostas salvas</h1>
+          <p class="mt-1 text-sm text-gray-600">
+            Total: <span class="font-semibold">{{ respostas.length }}</span>
+          </p>
+        </div>
 
-        <div class="flex gap-2">
-          <button
-            type="button"
-            class="rounded-xl border border-gray-300 px-4 py-2"
-            @click="atualizar"
-          >
+        <div class="flex flex-wrap gap-2">
+          <button type="button" class="btn btn-secondary" @click="atualizar">
             Atualizar
           </button>
 
           <button
             type="button"
-            class="rounded-xl bg-black px-4 py-2 text-white"
+            class="btn btn-primary"
             :disabled="respostas.length === 0"
-            :class="respostas.length === 0 ? 'opacity-50' : ''"
             @click="limpar"
           >
             Limpar tudo
@@ -25,13 +25,9 @@
         </div>
       </div>
 
-      <p class="mt-2 text-sm text-gray-600">
-        Total: <span class="font-semibold">{{ respostas.length }}</span>
-      </p>
-
       <div
         v-if="respostas.length === 0"
-        class="mt-6 rounded-xl bg-gray-50 p-4 text-sm text-gray-700"
+        class="mt-6 rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-700"
       >
         Nenhuma resposta salva ainda.
       </div>
@@ -40,45 +36,44 @@
         <div
           v-for="r in respostas"
           :key="r.id"
-          class="rounded-2xl border border-gray-200 p-4"
+          class="rounded-2xl border border-gray-200 bg-white p-4"
         >
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <div class="text-sm text-gray-600">
-              <div>
-                <span class="font-semibold">Criada em:</span>
-                {{ formatarData(r.createdAt) }}
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="min-w-[220px]">
+              <div class="text-sm text-gray-700">
+                <span class="font-semibold">Criada em:</span> {{ formatarData(r.createdAt) }}
+              </div>
+              <div v-if="r.updatedAt" class="text-sm text-gray-700">
+                <span class="font-semibold">Atualizada em:</span> {{ formatarData(r.updatedAt) }}
               </div>
 
-              <div class="mt-1 text-xs text-gray-500">
-                <span v-if="r.updatedAt">
-                  <span class="font-semibold">Última atualização:</span>
-                  {{ tempoRelativo(r.updatedAt) }}
-                </span>
-                <span v-else>
-                  <span class="font-semibold">Criada:</span>
-                  {{ tempoRelativo(r.createdAt) }}
-                </span>
+              <div class="mt-2 text-xs text-gray-500">
+                ID: <span class="font-mono">{{ r.id }}</span>
               </div>
             </div>
 
-            <div class="flex items-center gap-2">
-              <RouterLink
-                :to="`/responses/${r.id}`"
-                class="rounded-lg border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50"
-              >
+            <div class="flex flex-wrap items-center gap-2">
+              <!-- Badges -->
+              <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs">
+                <span class="font-semibold">Nota:</span> {{ r.answers.csat ?? '-' }}
+              </span>
+
+              <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs">
+                <span class="font-semibold">Humor:</span> {{ traduzirHumor(r.answers.mood) }}
+              </span>
+
+              <!-- Actions -->
+              <RouterLink :to="`/responses/${r.id}`" class="btn btn-secondary px-3 py-1">
                 Ver
               </RouterLink>
 
-              <RouterLink
-                :to="`/responses/${r.id}/edit`"
-                class="rounded-lg border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50"
-              >
+              <RouterLink :to="`/responses/${r.id}/edit`" class="btn btn-secondary px-3 py-1">
                 Editar
               </RouterLink>
 
               <button
                 type="button"
-                class="rounded-lg border border-red-200 px-3 py-1 text-sm text-red-700 hover:bg-red-50"
+                class="btn btn-secondary px-3 py-1 border-red-200 text-red-700 hover:bg-red-50"
                 @click="excluir(r.id)"
               >
                 Excluir
@@ -86,13 +81,7 @@
             </div>
           </div>
 
-          <div class="mt-2 text-sm text-gray-600">
-            <span class="font-semibold">Nota:</span> {{ r.answers.csat ?? '-' }}
-            • <span class="font-semibold">Humor:</span>
-            {{ traduzirHumor(r.answers.mood) }}
-          </div>
-
-          <div class="mt-3 grid gap-2 text-sm">
+          <div class="mt-3 grid gap-2 text-sm text-gray-800">
             <div>
               <span class="font-semibold">E-mail:</span>
               {{ r.answers.email ? r.answers.email : 'Não informado' }}
@@ -112,9 +101,7 @@
       </div>
 
       <div class="mt-8">
-        <RouterLink to="/" class="text-sm text-blue-600 hover:underline">
-          ← Voltar para o início
-        </RouterLink>
+        <RouterLink to="/" class="link text-sm">← Voltar para o início</RouterLink>
       </div>
     </div>
   </div>
@@ -148,29 +135,10 @@ function excluir(id: string) {
 
 function formatarData(iso: string) {
   try {
-    const d = new Date(iso);
-    return d.toLocaleString('pt-BR');
+    return new Date(iso).toLocaleString('pt-BR');
   } catch {
     return iso;
   }
-}
-
-// "há X" em português (simples e suficiente pro projeto)
-function tempoRelativo(iso: string) {
-  const t = new Date(iso).getTime();
-  if (Number.isNaN(t)) return '-';
-
-  const diffMs = Date.now() - t;
-  const sec = Math.floor(diffMs / 1000);
-  const min = Math.floor(sec / 60);
-  const hr = Math.floor(min / 60);
-  const day = Math.floor(hr / 24);
-
-  if (sec < 10) return 'agora';
-  if (sec < 60) return `há ${sec} segundos`;
-  if (min < 60) return `há ${min} minuto${min === 1 ? '' : 's'}`;
-  if (hr < 24) return `há ${hr} hora${hr === 1 ? '' : 's'}`;
-  return `há ${day} dia${day === 1 ? '' : 's'}`;
 }
 
 function traduzirHumor(mood: Mood | null) {
