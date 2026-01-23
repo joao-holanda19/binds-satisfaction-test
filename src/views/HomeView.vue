@@ -1,36 +1,65 @@
 <template>
-  <div
-    class="min-h-screen flex items-center justify-center p-6"
-  >
-    <!-- fundo suave (tipo print) -->
-    <div class="fixed inset-0 -z-10 bg-gradient-to-b from-white to-[#f3f0ff]" />
-    <div class="fixed inset-0 -z-10 opacity-60 blur-3xl"
-      style="background: radial-gradient(circle at 50% 35%, rgba(124,58,237,0.18), transparent 55%);"
-    />
+  <div class="min-h-screen binds-bg p-6">
+    <div class="mx-auto w-full max-w-4xl space-y-6">
+      <!-- HERO -->
+      <div class="binds-card p-8">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-sm font-semibold text-gray-600">Binds.co</p>
+            <h1 class="mt-1 text-3xl font-bold text-gray-900">
+              Pesquisa de Satisfação
+            </h1>
+            <p class="mt-2 max-w-2xl text-sm text-gray-600">
+              Ajude-nos a melhorar respondendo uma pesquisa rápida. Você também pode consultar e gerenciar
+              as respostas já salvas.
+            </p>
+          </div>
 
-    <!-- card central -->
-    <div class="w-full max-w-md rounded-2xl bg-white/90 backdrop-blur p-8 shadow-lg border border-black/5">
-      <div class="flex flex-col items-center text-center gap-6">
-        <!-- “falso header” (opcional, só pra ficar mais parecido com o print) -->
-        <div class="h-4 w-40 rounded-full bg-black/5" />
+          <div class="flex flex-wrap gap-2">
+            <RouterLink to="/p/default" class="btn btn-primary">
+              Iniciar pesquisa
+            </RouterLink>
 
-        <RouterLink
-          to="/p/default"
-          class="w-full rounded-xl px-6 py-3 font-semibold text-white text-center transition active:scale-[0.99]"
-          style="background: linear-gradient(90deg, #6d28d9, #7c3aed);"
-        >
-          Iniciar pesquisa
-        </RouterLink>
-
-        <div class="w-full border-t border-black/5" />
-
-        <RouterLink
-          to="/responses"
-          class="text-sm text-black/70 hover:text-black transition"
-        >
-          <span class="font-medium">Admin:</span> Ver respostas →
-        </RouterLink>
+            <RouterLink to="/responses" class="btn btn-secondary">
+              Ver respostas
+            </RouterLink>
+          </div>
+        </div>
       </div>
+
+      <!-- AÇÕES EM CARDS -->
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="binds-card p-6">
+          <h2 class="text-lg font-bold">Iniciar agora</h2>
+          <p class="mt-2 text-sm text-gray-600">
+            Responda em poucos passos: humor, nota, e-mail (opcional) e sugestão de recurso.
+          </p>
+
+          <div class="mt-5">
+            <RouterLink to="/p/default" class="btn btn-primary w-full justify-center">
+              Começar
+            </RouterLink>
+          </div>
+        </div>
+
+        <div class="binds-card p-6">
+          <h2 class="text-lg font-bold">Gerenciar respostas</h2>
+          <p class="mt-2 text-sm text-gray-600">
+            Veja detalhes, edite ou exclua respostas salvas no navegador.
+          </p>
+
+          <div class="mt-5">
+            <RouterLink to="/responses" class="btn btn-secondary w-full justify-center">
+              Acessar lista
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé simples -->
+      <p class="text-center text-xs text-gray-500">
+        As respostas são salvas localmente neste navegador (localStorage).
+      </p>
     </div>
   </div>
 </template>
