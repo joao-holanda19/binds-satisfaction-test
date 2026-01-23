@@ -1,4 +1,3 @@
-<!-- src/views/SurveyView.vue -->
 <template>
   <SurveyForm
     titulo="Pesquisa"
@@ -9,28 +8,45 @@
     @submit="onSubmit"
   />
 
-  <!-- MODAL "OBRIGADO" (Binds: roxo/branco, padrão do layout) -->
+  <!-- MODAL "OBRIGADO" (padrão Binds) -->
   <div
     v-if="showThankYouModal"
-    class="fixed inset-0 z-50 flex items-center justify-center p-6"
-    style="background: rgba(17, 24, 39, 0.45)"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-6"
     role="dialog"
     aria-modal="true"
     aria-label="Resposta enviada"
   >
-    <div class="w-full max-w-sm binds-card p-6">
-      <h2 class="text-2xl font-bold">Obrigado!</h2>
-      <p class="mt-2 text-sm text-gray-600">Sua resposta foi enviada com sucesso.</p>
+    <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">Obrigado!</h2>
+          <p class="mt-2 text-sm text-gray-600">
+            Sua resposta foi enviada com sucesso.
+          </p>
+        </div>
+
+        <span
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-xl"
+          aria-hidden="true"
+        >
+          ✅
+        </span>
+      </div>
 
       <div class="mt-6 grid gap-3">
-        <button type="button" class="btn btn-primary w-full" @click="closeThankYou">
+        <button
+          type="button"
+          class="btn btn-primary w-full justify-center"
+          @click="closeThankYou"
+        >
           Fechar
         </button>
 
         <button
           type="button"
-          class="btn btn-secondary w-full"
+          class="btn btn-secondary w-full justify-center"
           :disabled="!lastSavedId"
+          :class="!lastSavedId ? 'opacity-50' : ''"
           @click="goToMySubmission"
         >
           Ver meu envio
@@ -54,6 +70,7 @@ const answers = ref<SurveyAnswers>(defaultSurveyAnswers());
 const isSubmitting = ref(false);
 const submitted = ref(false);
 
+// Modal do "Obrigado"
 const showThankYouModal = ref(false);
 const lastSavedId = ref<string | null>(null);
 
@@ -78,7 +95,7 @@ async function onSubmit(payload: SurveyAnswers) {
     submitted.value = true;
     showThankYouModal.value = true;
 
-    // opcional: resetar o formulário depois de salvar
+    // opcional: resetar a pesquisa após salvar
     // answers.value = defaultSurveyAnswers();
   } finally {
     isSubmitting.value = false;
