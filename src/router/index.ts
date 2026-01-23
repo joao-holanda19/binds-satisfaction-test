@@ -3,7 +3,8 @@ import HomeView from '../views/HomeView.vue';
 import SurveyView from '../views/SurveyView.vue';
 import ResponsesView from '../views/ResponsesView.vue';
 
-const UUID_RE = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}';
+const UUID_RE =
+  '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,15 +13,14 @@ const router = createRouter({
     { path: '/p/default', name: 'survey', component: SurveyView },
     { path: '/responses', name: 'responses', component: ResponsesView },
 
-    // MAIS ESPECÍFICA PRIMEIRO
+    // MAIS ESPECÍFICA PRIMEIRO (edit) + valida UUID
     {
-  path: '/responses/:id/edit',
-  name: 'response-edit',
-  component: () => import('../views/ResponseEditView.vue'),
-  },
+      path: `/responses/:id(${UUID_RE})/edit`,
+      name: 'response-edit',
+      component: () => import('../views/ResponseEditView.vue'),
+    },
 
-
-    // DETALHE: só aceita UUID
+    // DETALHE + valida UUID
     {
       path: `/responses/:id(${UUID_RE})`,
       name: 'response-detail',
