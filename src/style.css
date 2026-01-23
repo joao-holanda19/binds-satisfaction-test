@@ -2,21 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============== */
-/* Binds Theme    */
-/* ============== */
 :root {
   /* Core */
   --binds-purple: 124 58 237; /* #7C3AED */
-  --binds-purple-600: 124 58 237;
   --binds-purple-700: 109 40 217; /* #6D28D9 */
 
   /* Surfaces */
-  --bg: 246 247 251;         /* fundo bem claro */
-  --card: 255 255 255;       /* branco */
-  --text: 17 24 39;          /* gray-900 */
-  --muted: 107 114 128;      /* gray-500 */
-  --border: 229 231 235;     /* gray-200 */
+  --bg: 246 247 251;
+  --card: 255 255 255;
+  --text: 17 24 39;
+  --muted: 107 114 128;
+  --border: 229 231 235;
 
   /* Shadows */
   --shadow: 0 10px 30px rgba(17, 24, 39, 0.10);
@@ -32,31 +28,35 @@ body {
   color: rgb(var(--text));
 }
 
-/* Seleção de texto com cor da marca */
+/* Seleção de texto */
 ::selection {
   background: rgba(var(--binds-purple), 0.22);
 }
 
-/* Um “brilho” suave de fundo (bem parecido com o estilo dos prints) */
+/* Fundo com glow roxo */
 .binds-bg {
   background:
     radial-gradient(900px 600px at 50% 72%, rgba(var(--binds-purple), 0.10), transparent 60%),
     rgb(var(--bg));
 }
 
-/* Cards padrão */
+/* Card padrão */
 .binds-card {
   background: rgb(var(--card));
   border: 1px solid rgb(var(--border));
   box-shadow: var(--shadow);
-  border-radius: 20px; /* ~rounded-2xl */
+  border-radius: 20px;
 }
 
-/* Botões padrão */
+/* ===================== */
+/* BOTÕES */
+/* ===================== */
+
 .btn {
   @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition;
 }
 
+/* Roxo (ações normais) */
 .btn-primary {
   background: rgb(var(--binds-purple));
   color: white;
@@ -69,32 +69,30 @@ body {
   cursor: not-allowed;
 }
 
+/* Neutro */
 .btn-secondary {
-  @apply border;
-  border-color: rgb(var(--border));
+  border: 1px solid rgb(var(--border));
   background: white;
   color: rgb(var(--text));
 }
 .btn-secondary:hover {
   background: rgba(17, 24, 39, 0.03);
 }
-.btn-secondary:disabled {
+
+/* Vermelho (ações destrutivas) */
+.btn-danger {
+  background: rgb(220 38 38); /* red-600 */
+  color: white;
+}
+.btn-danger:hover {
+  background: rgb(185 28 28); /* red-700 */
+}
+.btn-danger:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-/* Inputs padrão */
-.input {
-  @apply w-full rounded-xl border px-3 py-2 text-sm outline-none transition;
-  border-color: rgb(var(--border));
-  background: white;
-}
-.input:focus {
-  border-color: rgba(var(--binds-purple), 0.9);
-  box-shadow: 0 0 0 4px rgba(var(--binds-purple), 0.15);
-}
-
-/* Links padrão */
+/* Links */
 .link {
   color: rgb(var(--binds-purple));
   font-weight: 600;

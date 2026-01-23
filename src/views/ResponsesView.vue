@@ -12,15 +12,14 @@
           </div>
 
           <div class="flex flex-wrap gap-2">
-            <button type="button" class="btn btn-secondary" @click="atualizar">
+            <button type="button" class="btn btn-primary" @click="atualizar">
               Atualizar
             </button>
 
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn btn-danger"
               :disabled="respostas.length === 0"
-              :class="respostas.length === 0 ? 'opacity-50' : ''"
               @click="limpar"
             >
               Limpar tudo
@@ -33,12 +32,13 @@
         </div>
       </div>
 
-      <!-- Empty -->
+      <!-- Empty state -->
       <div
         v-if="respostas.length === 0"
         class="mt-4 binds-card p-6 text-sm text-gray-700"
       >
         Nenhuma resposta salva ainda.
+
         <div class="mt-4">
           <RouterLink to="/p/default" class="btn btn-primary">
             Iniciar pesquisa
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <!-- List -->
+      <!-- Lista -->
       <div v-else class="mt-4 space-y-3">
         <div
           v-for="r in respostas"
@@ -56,45 +56,47 @@
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
               <div class="text-sm text-gray-600">
-                <span class="font-semibold">Data:</span> {{ formatarData(r.createdAt) }}
+                <span class="font-semibold">Data:</span>
+                {{ formatarData(r.createdAt) }}
               </div>
 
               <div class="mt-1 text-sm text-gray-600">
                 <span class="font-semibold">Nota:</span> {{ r.answers.csat ?? '-' }}
                 <span class="mx-2 text-gray-300">•</span>
-                <span class="font-semibold">Humor:</span> {{ traduzirHumor(r.answers.mood) }}
+                <span class="font-semibold">Humor:</span>
+                {{ traduzirHumor(r.answers.mood) }}
               </div>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
               <RouterLink
-  :to="`/responses/${r.id}`"
-  class="btn btn-secondary"
->
-  Ver
-</RouterLink>
+                :to="`/responses/${r.id}`"
+                class="btn btn-primary"
+              >
+                Ver
+              </RouterLink>
 
-<RouterLink
-  :to="`/responses/${r.id}/edit`"
-  class="btn btn-primary"
->
-  Editar
-</RouterLink>
+              <RouterLink
+                :to="`/responses/${r.id}/edit`"
+                class="btn btn-primary"
+              >
+                Editar
+              </RouterLink>
 
-<button
-  type="button"
-  class="btn btn-secondary border-red-300 text-red-700 hover:bg-red-50"
-  @click="excluir(r.id)"
->
-  Excluir
-</button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="excluir(r.id)"
+              >
+                Excluir
+              </button>
             </div>
           </div>
 
           <div class="mt-4 grid gap-2 text-sm text-gray-700">
             <div>
               <span class="font-semibold">E-mail:</span>
-              {{ r.answers.email ? r.answers.email : 'Não informado' }}
+              {{ r.answers.email || 'Não informado' }}
             </div>
 
             <div>
@@ -104,7 +106,7 @@
 
             <div>
               <span class="font-semibold">Comentário:</span>
-              {{ r.answers.comment ? r.answers.comment : 'Sem comentário' }}
+              {{ r.answers.comment || 'Sem comentário' }}
             </div>
           </div>
         </div>
@@ -152,8 +154,7 @@ function excluir(id: string) {
 
 function formatarData(iso: string) {
   try {
-    const d = new Date(iso);
-    return d.toLocaleString('pt-BR');
+    return new Date(iso).toLocaleString('pt-BR');
   } catch {
     return iso;
   }
