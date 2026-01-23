@@ -75,17 +75,20 @@ const lastSavedId = ref<string | null>(null);
 function closeThankYou() {
   showThankYouModal.value = false;
 
-  // resetar formulário para próxima pesquisa
+  // resetar estado para próxima pesquisa
   answers.value = defaultSurveyAnswers();
+  submitted.value = false;
+  lastSavedId.value = null;
 
-  // voltar para a tela inicial
-  router.push('/');
+  // voltar para a tela inicial (home)
+  router.push({ name: 'home' });
 }
 
 function goToMySubmission() {
   if (!lastSavedId.value) return;
-  router.push(`/responses/${lastSavedId.value}`);
   showThankYouModal.value = false;
+
+  router.push({ name: 'response-detail', params: { id: lastSavedId.value } });
 }
 
 async function onSubmit(payload: SurveyAnswers) {
