@@ -62,7 +62,9 @@
               </div>
 
               <div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
-                <span class="rounded-full bg-violet-50 px-3 py-1 font-semibold text-violet-700">
+                <span
+                  class="rounded-full bg-violet-50 px-3 py-1 font-semibold text-violet-700"
+                >
                   Nota: {{ r.answers.csat ?? '-' }}
                 </span>
                 <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">
@@ -72,25 +74,15 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-              <RouterLink
-                :to="`/responses/${r.id}`"
-                class="btn btn-primary"
-              >
+              <RouterLink :to="`/responses/${r.id}`" class="btn btn-secondary">
                 Ver
               </RouterLink>
 
-              <RouterLink
-                :to="`/responses/${r.id}/edit`"
-                class="btn btn-primary"
-              >
+              <RouterLink :to="`/responses/${r.id}/edit`" class="btn btn-primary">
                 Editar
               </RouterLink>
 
-              <button
-                type="button"
-                class="btn btn-danger"
-                @click="excluir(r.id)"
-              >
+              <button type="button" class="btn btn-danger" @click="excluir(r.id)">
                 Excluir
               </button>
             </div>

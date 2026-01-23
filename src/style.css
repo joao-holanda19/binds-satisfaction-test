@@ -69,17 +69,23 @@ body {
   cursor: not-allowed;
 }
 
-/* Neutro */
+/* Neutro (para "Ver") */
 .btn-secondary {
   border: 1px solid rgb(var(--border));
-  background: white;
-  color: rgb(var(--text));
+  background: white !important;
+  color: rgb(var(--text)) !important;
 }
 .btn-secondary:hover {
-  background: rgba(17, 24, 39, 0.03);
+  background: rgba(17, 24, 39, 0.03) !important;
+  color: rgb(var(--text)) !important;
+}
+.btn-secondary:focus,
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(var(--binds-purple), 0.12);
 }
 
-/* Vermelho (ações destrutivas) */
+/* Vermelho */
 .btn-danger {
   background: rgb(220 38 38); /* red-600 */
   color: white;
