@@ -40,7 +40,7 @@
       >
         Nenhuma resposta salva ainda.
         <div class="mt-4">
-          <RouterLink to="/p/default" class="btn btn-primary">
+          <RouterLink :to="{ name: 'survey' }" class="btn btn-primary">
             Iniciar pesquisa
           </RouterLink>
         </div>
@@ -58,13 +58,11 @@
             <div>
               <div class="text-sm text-gray-600">
                 <span class="font-semibold">Data:</span>
-                {{ formatarData(r.createdAt) }}
+                {{ formatarData(r.updatedAt ?? r.createdAt) }}
               </div>
 
               <div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
-                <span
-                  class="rounded-full bg-violet-50 px-3 py-1 font-semibold text-violet-700"
-                >
+                <span class="rounded-full bg-violet-50 px-3 py-1 font-semibold text-violet-700">
                   Nota: {{ r.answers.csat ?? '-' }}
                 </span>
                 <span class="rounded-full bg-gray-100 px-3 py-1 text-gray-700">
@@ -116,11 +114,11 @@
 
       <!-- Footer -->
       <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
-        <RouterLink to="/" class="link text-sm">
+        <RouterLink :to="{ name: 'home' }" class="link text-sm">
           ← Voltar para o início
         </RouterLink>
 
-        <RouterLink to="/p/default" class="btn btn-primary">
+        <RouterLink :to="{ name: 'survey' }" class="btn btn-primary">
           Nova pesquisa
         </RouterLink>
       </div>

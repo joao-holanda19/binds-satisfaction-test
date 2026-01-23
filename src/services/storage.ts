@@ -44,7 +44,6 @@ export function salvarResposta(answers: SurveyAnswers): SurveyRecord {
   const record: SurveyRecord = {
     id: crypto.randomUUID(),
     createdAt: now,
-    updatedAt: now,
     answers,
   };
 

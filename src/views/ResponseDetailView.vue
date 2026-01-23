@@ -25,12 +25,12 @@
 
         <div class="flex flex-wrap items-center gap-2">
           <RouterLink
-  v-if="record"
-  :to="{ name: 'response-edit', params: { id: record.id } }"
-  class="btn btn-primary"
->
-  Editar
-</RouterLink>
+            v-if="record"
+            :to="{ name: 'response-edit', params: { id: record.id } }"
+            class="btn btn-primary"
+          >
+            Editar
+          </RouterLink>
 
           <button
             v-if="record"
@@ -47,7 +47,7 @@
         <p class="text-sm text-gray-700">Resposta não encontrada.</p>
 
         <div class="mt-4">
-          <RouterLink to="/responses" class="link text-sm">
+          <RouterLink :to="{ name: 'responses' }" class="link text-sm">
             ← Voltar para a lista
           </RouterLink>
         </div>
@@ -86,7 +86,7 @@
         </div>
 
         <div class="text-sm">
-          <RouterLink to="/responses" class="link">
+          <RouterLink :to="{ name: 'responses' }" class="link">
             ← Voltar para a lista
           </RouterLink>
         </div>
@@ -118,7 +118,7 @@ function excluir() {
   if (!ok) return;
 
   removerResposta(record.value.id);
-  router.push('/responses');
+  router.push({ name: 'responses' });
 }
 
 function formatarData(iso: string) {
