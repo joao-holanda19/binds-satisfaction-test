@@ -49,11 +49,7 @@
         class="mt-4 binds-card p-6 text-sm text-gray-700"
       >
         Nenhuma resposta salva ainda.
-        <div class="mt-4">
-          <RouterLink to="/p/default" class="btn btn-primary">
-            Iniciar pesquisa
-          </RouterLink>
-        </div>
+        <!-- removido: botão "Iniciar pesquisa" -->
       </div>
 
       <!-- List -->
@@ -222,7 +218,6 @@ onMounted(() => {
   atualizar();
 });
 
-// sempre que voltar/navegar para esta tela, garante lista atualizada
 watch(
   () => route.fullPath,
   () => {
