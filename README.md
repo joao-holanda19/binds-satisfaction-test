@@ -1,6 +1,7 @@
 # Entrega – Teste de Satisfação
 
 ## 1. Repositório Git
+
 Projeto disponível no GitHub:
 
 👉 https://github.com/joao-holanda19/binds-satisfaction-test
@@ -20,68 +21,98 @@ Ambiente de desenvolvimento
 npm run dev
 O projeto ficará disponível em:
 
-http://localhost:5173
+👉 http://localhost:5173
+
 Build de produção
 npm run build
 Lint
 npm run lint
-3. 📁 Arquitetura e organização de pastas
-src/
-├── components/        # Componentes reutilizáveis (SurveyForm, modais, etc.)
-├── views/             # Páginas da aplicação (Home, Survey, Responses, Detail, Edit)
-├── router/            # Configuração das rotas (Vue Router)
-├── services/          # Camada de acesso a dados (localStorage)
-├── types/             # Tipagens TypeScript (SurveyAnswers, enums, etc.)
-├── assets/            # Estilos e recursos estáticos
-├── App.vue            # Componente raiz
-└── main.ts            # Bootstrap da aplicação
-Principais decisões
-Componentização clara entre páginas (views) e componentes reutilizáveis (components)
+3. Deploy
+Aplicação publicada na Vercel:
 
-Camada de serviço (services/storage.ts) isolando toda a lógica de persistência
+👉 https://binds-satisfaction-test.vercel.app/
 
-Tipagem forte com TypeScript para respostas, enums e registros
+4. 🗂️ Arquitetura / organização de pastas
+📦 src
+ ┣ 📂 components
+ ┃ ┣ 📄 SurveyForm.vue
+ ┃ ┣ 📄 ConfirmModal.vue
+ ┃ ┣ 📄 AppShell.vue
+ ┃ ┗ 📄 AppCard.vue
+ ┣ 📂 router
+ ┃ ┗ 📄 index.ts
+ ┣ 📂 services
+ ┃ ┗ 📄 storage.ts
+ ┣ 📂 types
+ ┃ ┣ 📄 survey.ts
+ ┃ ┗ 📄 (outros tipos, se existirem)
+ ┣ 📂 views
+ ┃ ┣ 📄 HomeView.vue
+ ┃ ┣ 📄 SurveyView.vue
+ ┃ ┣ 📄 ResponsesView.vue
+ ┃ ┣ 📄 ResponseDetailView.vue
+ ┃ ┗ 📄 ResponseEditView.vue
+ ┣ 📄 App.vue
+ ┗ 📄 main.ts
+O que fica onde
+📂 views/
+Telas (páginas) da aplicação
 
-Vue Router controlando fluxo de navegação (lista, detalhe e edição)
+📂 components/
+Componentes reutilizáveis (formulário, modal, cards)
 
-4. Regra para identificar o respondente
-Cada resposta é identificada por um UUID v4
+📂 services/storage.ts
+Persistência via localStorage (CRUD das respostas)
 
-O identificador é gerado no momento do envio da pesquisa
+📂 router/index.ts
+Definição das rotas da aplicação
 
-As respostas são armazenadas no localStorage
+📂 types/
+Tipos TypeScript do domínio (ex.: SurveyAnswers)
 
-Não há autenticação, pois o teste não exige backend
+Sobre AppShell.vue e AppCard.vue
+Esses componentes foram mantidos como base de arquitetura para possíveis expansões futuras, mesmo que o layout atual esteja aplicado diretamente nas views/:
 
-Essa abordagem garante:
+AppShell.vue: pensado como layout global da aplicação
 
-Identificação única de cada resposta
+AppCard.vue: pensado como componente reutilizável de card para padronização visual
 
-Simplicidade
+Observação: atualmente o projeto aplica as classes de layout diretamente nas telas para manter a implementação objetiva e fiel aos prints do teste.
 
-Persistência local conforme escopo do teste
+5. 👤 Regra escolhida para identificar respondente
+A identificação do respondente é feita por um UUID gerado no momento do envio da pesquisa e salvo junto da resposta no localStorage.
 
-5. Deploy
-O projeto está publicado na Vercel:
+Chave de armazenamento
+binds_satisfaction_responses_v1
+Estrutura de cada resposta
+id (UUID)
 
-👉 https://binds-satisfaction-test.vercel.app
+createdAt (ISO)
 
-Deploy automático a partir da branch main.
+updatedAt (ISO, opcional)
 
-6. Scripts obrigatórios
-dev – ambiente de desenvolvimento
+answers (dados do formulário)
 
-build – build de produção
+6. 💾 Persistência (LocalStorage)
+O projeto não depende de backend.
 
-lint – verificação de código
+Todas as respostas são salvas e gerenciadas no navegador via localStorage, incluindo as operações:
 
-Todos os scripts estão definidos no package.json.
+criar resposta
 
-Considerações finais
-Projeto desenvolvido sem backend, conforme permitido
+listar respostas (ordenadas por updatedAt ou createdAt)
 
-Persistência feita via localStorage
+ver detalhe
 
-Interface responsiva, acessível e alinhada aos layouts fornecidos
+editar resposta
 
-Fluxo completo de criação, listagem, visualização, edição e exclusão de respostas
+excluir resposta
+
+limpar todas as respostas
+
+7. Scripts obrigatórios
+dev
+
+build
+
+lint
